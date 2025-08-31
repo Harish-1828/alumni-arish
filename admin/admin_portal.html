@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin-Dashboard</title>
+    <link rel="stylesheet" href="admin_dashboard.css">
+</head>
+<body>
+    <div class="basic_frame">
+        
+        <div class="left_bar">
+            <div class="head">
+                <img src="images/logo.png" alt="mepco" class="logo">
+                <label style="margin-left: 20px; margin-top: 17px;">Mepco Admin</label>
+            </div>
+            <div class="user">
+                <img src="images/user.png" alt="user" class="user_icon">
+                <label style="margin-left: 20px; margin-top: 17px;">VIGNESH</label>
+            </div>
+
+            <div class="menu">
+                <div class="menu-items">
+                    <label>Dashboard</label>
+                </div>
+                <div class="menu-items">
+                    <label>Student</label>
+                </div>
+                <div class="menu-items">
+                    <label>Alumni</label>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="menu-items">
+                    <label>Settings</label>
+                </div>
+                <div class="menu-items">
+                    <label style="color: red;">Logout</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-frame">
+            <div class="main-header">
+                <input type="search" placeholder="search" class="search-bar">
+                <button class="add_std_btn" onclick="openModal()">Add Student</button>
+
+                <div class="notification">notification🔔</div>
+            </div>
+            <div class="alumni-statistics">
+                <div class="statistics-data">
+                    <label>Departments</label><br><br>
+                    <label">🏨10+</label>
+                </div>
+                <div class="statistics-data">
+                    <label>No. of Alumnis</label><br><br>
+                    <label">👨‍🎓10,989+</label>
+                </div>
+                <div class="statistics-data">
+                    <label>Employed</label><br><br>
+                    <label">👨‍🎓👨‍🏫👨‍🏭8989+</label>
+                </div>
+                <div class="statistics-data">
+                    <label>Entreprenuer</label><br><br>
+                    <label">👨‍💻2654+</label>
+                </div>
+            </div>
+            <table class="alumni-data-box">
+                <thead>
+                    <tr>
+                        <th>Alumni ID</th>
+                        <th>Name</th>
+                        <th>DOB</th>
+                        <th>Department</th>
+                        <th>batch</th>
+                        <th>contact</th>
+                        <th>status</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTable"></tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Student Add Popup Modal -->
+<div id="studentModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <h2>Add Student</h2>
+    <form id="studentForm" onsubmit="addStudent(event)">
+      <input type="text" id="alumni_id" placeholder="Alumni ID" required>
+      <input type="text" id="name" placeholder="Name" required>
+      <input type="date" id="dob" required>
+      <input type="text" id="department" placeholder="Department" required>
+      <input type="text" id="batch" placeholder="Batch (eg: 2023)" required>
+      <input type="text" id="contact" placeholder="Contact" required>
+      <input type="text" id="status" placeholder="Status" required>
+      <button type="submit" class="submit_btn">Add Student</button>
+    </form>
+  </div>
+</div>
+
+    <script src="admin_dashboard.js"></script>
+</body>
+</html>
