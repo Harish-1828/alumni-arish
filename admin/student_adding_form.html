@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Student</title>
+    <link rel="stylesheet" href="student_adding_form.css">
+</head>
+<body>
+    <div class="student_form">
+        <form id="studentForm" onsubmit="addStudent(event)">
+            <div class="form_data">
+                <label for="alumni_id">Alumni ID:</label>
+                <input type="text" id="alumni_id" required 
+                    style="margin-left: 75px; width: 230px; height: 30px; border-radius: 10px; padding-left: 10px;">
+            </div>
+            <div class="form_data">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required 
+                    style="margin-left: 100px; width: 230px; height: 30px; border-radius: 10px; padding-left: 10px;">
+            </div>
+            <div class="form_data">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" required 
+                    style="margin-left: 55px; width: 230px; height: 30px; border-radius: 10px; padding-left: 10px;">
+            </div>
+            <div class="form_data">
+                <label for="department">Department:</label>
+                <input type="text" id="department" required 
+                    style="margin-left: 58px; width: 230px; height: 30px; border-radius: 10px; padding-left: 10px;">
+            </div>
+            <div class="form_data">
+                <label for="batch">Batch:</label>
+                <input type="text" id="batch" placeholder="eg: 2023" required 
+                    style="margin-left: 103px; width: 230px; height: 30px; border-radius: 10px; padding-left: 10px;">
+            </div>
+            <div class="form_data">
+                <label for="contact">Contact:</label>
+                <input type="text" id="contact" required 
+                    style="margin-left: 88px; width: 230px; height: 30px; border-radius: 10px; padding-left: 10px;">
+            </div>
+            <div class="form_data">
+                <label for="status">Status:</label>
+                <input type="text" id="status" required 
+                    style="margin-left: 98px; width: 230px; height: 30px; border-radius: 10px; padding-left: 10px;">
+            </div>
+            <div style="height: 60px; margin-left: 100px;">
+                <button type="submit" class="submit_btn">Add Student</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ✅ Link your JS file -->
+    <script src="admin_dashboard.js"></script>
+</body>
+</html>
