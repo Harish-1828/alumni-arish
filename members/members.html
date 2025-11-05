@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Faculty Members - Alumni Network</title>
     <link rel="stylesheet" href="/home page/home_page.css">
     <link rel="stylesheet" href="../dark-mode.css">
     <link rel="stylesheet" href="members.css">
+    <script src="../auth-check.js"></script>
 </head>
 <body>
     <div class="top-header">
@@ -29,7 +33,7 @@
             <a href="../proudable_alumni/proudable_alumni.html"><li>PROUDABLE ALUMNI</li></a>
             <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
             <a href="#"><li style="position: relative; left: 290px;">ABOUT US</li></a>
-            <a href="../index.html"><li style="position: relative; left: 300px;">LOGOUT</li></a>
+            <a href="#" onclick="handleLogout(event)"><li style="position: relative; left: 300px;">LOGOUT</li></a>
         </ul>
     </nav>
 

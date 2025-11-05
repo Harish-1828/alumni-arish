@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Admin Dashboard - Enhanced</title>
     <link rel="stylesheet" href="admin_dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="../auth-check.js"></script>
 </head>
 <body>
 <div class="basic_frame">
@@ -37,7 +41,7 @@
 
         <div class="footer">
             <div class="menu-items"><label>⚙️ Settings</label></div>
-            <div class="menu-items" style="cursor:pointer;" onclick="AuthManager.logout()">
+            <div class="menu-items" style="cursor:pointer;" onclick="handleLogout(event)">
                 <label style="color:#e53e3e;">🚪 Logout</label>
             </div>
         </div>

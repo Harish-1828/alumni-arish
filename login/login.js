@@ -13,13 +13,19 @@ function login() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Store identifier in sessionStorage
+            // Store identifier and session flag in sessionStorage
             sessionStorage.setItem('loggedInUser', identifier);
+            sessionStorage.setItem('isLoggedIn', 'true');
+            sessionStorage.setItem('loginTime', new Date().getTime());
+            
+            // Prevent back button after logout
+            window.history.pushState(null, null, window.location.href);
+            
             if(identifier == "admin") {
-                window.location.href = "../admin/admin_portal.html";
+                window.location.replace("../admin/admin_portal.html");
             }
             else {
-                window.location.href = "../home page/home_page.html";
+                window.location.replace("../home page/home_page.html");
             }
         } else {
             alert("Invalid credentials");
@@ -30,6 +36,29 @@ function login() {
         alert("An error occurred. Please try again.");
     });
 }
+
+// Logout function
+function logout() {
+    // Clear all session data
+    sessionStorage.clear();
+    
+    // Redirect to login and prevent back navigation
+    window.location.replace("../login/login_page.html");
+}
+
+// Check if already logged in when on login page
+window.addEventListener('load', function() {
+    if (window.location.pathname.includes('login_page.html')) {
+        if (sessionStorage.getItem('isLoggedIn') === 'true') {
+            const user = sessionStorage.getItem('loggedInUser');
+            if (user === 'admin') {
+                window.location.replace("../admin/admin_portal.html");
+            } else {
+                window.location.replace("../home page/home_page.html");
+            }
+        }
+    }
+});
 
 // Admin: Add new alumni user (userid and password same)
 function addAlumniUser() {
