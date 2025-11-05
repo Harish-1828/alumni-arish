@@ -84,7 +84,7 @@
       </div>
       <div class="form-row">
         <label>Application Deadline
-          <input name="applicationDeadline" type="date">
+          <input name="applicationDeadline" type="date" id="applicationDeadline">
         </label>
       </div>
       <div class="form-row">
@@ -110,5 +110,15 @@
   </div>
   <script src="../dark-mode.js"></script>
   <script src="post-internship.js"></script>
+  <script>
+    // Set minimum date to today for application deadline
+    document.addEventListener('DOMContentLoaded', function() {
+      const deadlineInput = document.getElementById('applicationDeadline');
+      if (deadlineInput) {
+        const today = new Date().toISOString().split('T')[0];
+        deadlineInput.setAttribute('min', today);
+      }
+    });
+  </script>
 </body>
 </html>

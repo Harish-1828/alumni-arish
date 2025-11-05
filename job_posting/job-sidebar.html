@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>Job Board Sidebar</title>
   <link rel="stylesheet" href="job-sidebar.css">
+  <link rel="stylesheet" href="job-preferences.css">
   <link rel="stylesheet" href="../dark-mode.css">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
@@ -32,27 +33,38 @@
   </nav>
   <!-- Top row with buttons -->
   <div class="jobboard-topbar">
-    <button class="topbar-btn manage-btn">Manage Job Postings</button>
+    <button class="topbar-btn manage-btn" onclick="window.location.href='manage-postings.html?type=jobs'">Manage Job Postings</button>
     <button class="topbar-btn green-btn" onclick="window.location.href='post-job.html'">+ Post Job</button>
+    <button class="topbar-btn manage-btn" onclick="window.location.href='manage-postings.html?type=internships'">Manage Internship Postings</button>
     <button class="topbar-btn green-btn" onclick="window.location.href='post-internship.html'">+ Post Internship</button>
+    <button class="topbar-btn set-preferences-btn" onclick="PreferencesModal.open()">
+      <span class="set-preferences-btn-icon">⚙️</span>
+      <span>Set Job Preferences</span>
+    </button>
   </div>
 
   <div id="main-jobboard-content">
     <div id="sidebar-container">
       <div class="sidebar-list">
         <div class="sidebar-section">
-          <div class="sidebar-item active" data-type="jobs">
+          <div class="sidebar-item active" data-type="jobs-for-you">
             <span class="icon">&#128188;</span>
             <span>Jobs For You</span>
+            <span class="preference-indicator" id="preferenceBadge" style="display:none;">✓</span>
           </div>
           <div class="sidebar-item" data-type="jobs">
             <span class="icon">&#128188;</span>
-            <span>Jobs</span>
+            <span>All Jobs</span>
           </div>
           
+          <div class="sidebar-item" data-type="internships-for-you">
+            <span class="icon">&#127891;</span>
+            <span>Internships For You</span>
+            <span class="preference-indicator" id="preferenceBadgeIntern" style="display:none;">✓</span>
+          </div>
           <div class="sidebar-item" data-type="internships">
             <span class="icon">&#127891;</span>
-            <span>Internships</span>
+            <span>All Internships</span>
           </div>
         </div>
 
@@ -102,6 +114,7 @@
   </div>
 
   <script src="../dark-mode.js"></script>
+  <script src="job-preferences.js"></script>
   <script src="jobs-display.js"></script>
 </body>
 </html>

@@ -34,10 +34,33 @@ document.getElementById('postInternForm').addEventListener('submit', async funct
     msg.style.color = "#e22";
     return;
   }
+  
+  // Validate application deadline - should not be in the past
+  if (applicationDeadline) {
+    const deadlineDate = new Date(applicationDeadline);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    deadlineDate.setHours(0, 0, 0, 0);
+    
+    if (deadlineDate < today) {
+      msg.textContent = "Application deadline cannot be in the past.";
+      msg.style.color = "#e22";
+      return;
+    }
+  }
 
   // Submit
   msg.textContent = "Posting...";
   msg.style.color = "#444";
+  
+  // Get logged-in user
+  const loggedInUser = sessionStorage.getItem('loggedInUser');
+  if (!loggedInUser) {
+    msg.textContent = "You must be logged in to post an internship.";
+    msg.style.color = "#e22";
+    return;
+  }
+  
   try {
   const res = await fetch('http://localhost:5000/api/internships', {
       method: 'POST',
@@ -45,7 +68,7 @@ document.getElementById('postInternForm').addEventListener('submit', async funct
       body: JSON.stringify({
         title, company, companyWebsite, duration,
         location, contactEmail, jobArea, skills, stipend,
-        applicationDeadline, description
+        applicationDeadline, description, postedBy: loggedInUser
       })
     });
     if (res.ok) {

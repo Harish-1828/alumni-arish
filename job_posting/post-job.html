@@ -67,7 +67,7 @@
       <input name="salary" placeholder="10–15 LPA" />
 
       <label>Application Deadline</label>
-      <input name="applicationDeadline" type="date" />
+      <input name="applicationDeadline" type="date" id="applicationDeadline" />
 
       <label>Job Description</label>
       <textarea name="jobDescription" required></textarea>
@@ -82,6 +82,16 @@
 
   <script src="../dark-mode.js"></script>
   <script src="post-job.js"></script>
+  <script>
+    // Set minimum date to today for application deadline
+    document.addEventListener('DOMContentLoaded', function() {
+      const deadlineInput = document.getElementById('applicationDeadline');
+      if (deadlineInput) {
+        const today = new Date().toISOString().split('T')[0];
+        deadlineInput.setAttribute('min', today);
+      }
+    });
+  </script>
 </body>
 </html>
 </html>

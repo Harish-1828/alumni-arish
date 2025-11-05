@@ -18,6 +18,7 @@ const jobSchema = new mongoose.Schema({
   applicationDeadline: String,
   jobDescription: { type: String, required: true },
   postedDate: { type: Date, default: Date.now },
+  postedBy: { type: String, required: true }, // Alumni identifier who posted the job
 });
 
 // Internship Schema
@@ -34,6 +35,7 @@ const internshipSchema = new mongoose.Schema({
   applicationDeadline: String,
   description: { type: String, required: true },
   postedDate: { type: Date, default: Date.now },
+  postedBy: { type: String, required: true }, // Alumni identifier who posted the internship
 });
 
 const Job = mongoose.model('Job', jobSchema, 'jobposts');
@@ -73,7 +75,7 @@ router.get('/locations', asyncHandler(async (req, res) => {
   res.json(clean);
 }));
 
-// Get all jobs with filters
+// Get all jobs with filters (excluding expired ones)
 router.get('/jobs', asyncHandler(async (req, res) => {
   const { company, jobArea, skill, location } = req.query;
   const query = {};
@@ -91,6 +93,16 @@ router.get('/jobs', asyncHandler(async (req, res) => {
     query.location = { $elemMatch: { $regex: new RegExp(`^${escapeRegex(location)}$`, 'i') } };
   }
 
+  // Exclude jobs with expired deadlines
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  query.$or = [
+    { applicationDeadline: { $exists: false } },
+    { applicationDeadline: null },
+    { applicationDeadline: '' },
+    { applicationDeadline: { $gte: today.toISOString() } }
+  ];
+
   const jobs = await Job.find(query).sort({ postedDate: -1 });
   res.json(jobs);
 }));
@@ -100,14 +112,28 @@ router.post('/jobs', asyncHandler(async (req, res) => {
   const {
     jobTitle, company, companyWebsite, experienceFrom, experienceTo,
     location, contactEmail, jobArea, skills, salary,
-    applicationDeadline, jobDescription,
+    applicationDeadline, jobDescription, postedBy,
   } = req.body;
 
-  if (!jobTitle || !company || !contactEmail || !jobDescription) {
+  if (!jobTitle || !company || !contactEmail || !jobDescription || !postedBy) {
     return res.status(400).json({ 
       success: false,
-      message: 'Missing required fields: jobTitle, company, contactEmail, and jobDescription are required' 
+      message: 'Missing required fields: jobTitle, company, contactEmail, jobDescription, and postedBy are required' 
     });
+  }
+
+  // Validate application deadline - should not be in the past
+  if (applicationDeadline) {
+    const deadline = new Date(applicationDeadline);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for fair comparison
+    
+    if (deadline < today) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Application deadline cannot be in the past' 
+      });
+    }
   }
 
   const job = new Job({
@@ -123,6 +149,7 @@ router.post('/jobs', asyncHandler(async (req, res) => {
     salary: salary ? String(salary).trim() : undefined,
     applicationDeadline: applicationDeadline ? String(applicationDeadline).trim() : undefined,
     jobDescription: String(jobDescription).trim(),
+    postedBy: String(postedBy).trim(),
   });
 
   const saved = await job.save();
@@ -167,7 +194,7 @@ router.get('/internships/locations', asyncHandler(async (req, res) => {
   res.json(clean);
 }));
 
-// Get all internships with filters
+// Get all internships with filters (excluding expired ones)
 router.get('/internships', asyncHandler(async (req, res) => {
   const { company, jobArea, skill, location } = req.query;
   const query = {};
@@ -185,6 +212,16 @@ router.get('/internships', asyncHandler(async (req, res) => {
     query.location = { $elemMatch: { $regex: new RegExp(`^${escapeRegex(location)}$`, 'i') } };
   }
 
+  // Exclude internships with expired deadlines
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  query.$or = [
+    { applicationDeadline: { $exists: false } },
+    { applicationDeadline: null },
+    { applicationDeadline: '' },
+    { applicationDeadline: { $gte: today.toISOString() } }
+  ];
+
   const internships = await Internship.find(query).sort({ postedDate: -1 });
   res.json(internships);
 }));
@@ -194,14 +231,28 @@ router.post('/internships', asyncHandler(async (req, res) => {
   const {
     title, company, companyWebsite, duration,
     location, contactEmail, jobArea, skills, stipend,
-    applicationDeadline, description,
+    applicationDeadline, description, postedBy,
   } = req.body;
 
-  if (!title || !company || !contactEmail || !description) {
+  if (!title || !company || !contactEmail || !description || !postedBy) {
     return res.status(400).json({ 
       success: false,
-      message: 'Missing required fields: title, company, contactEmail, and description are required' 
+      message: 'Missing required fields: title, company, contactEmail, description, and postedBy are required' 
     });
+  }
+
+  // Validate application deadline - should not be in the past
+  if (applicationDeadline) {
+    const deadline = new Date(applicationDeadline);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to start of day for fair comparison
+    
+    if (deadline < today) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Application deadline cannot be in the past' 
+      });
+    }
   }
 
   const internship = new Internship({
@@ -216,6 +267,7 @@ router.post('/internships', asyncHandler(async (req, res) => {
     stipend: stipend ? String(stipend).trim() : undefined,
     applicationDeadline: applicationDeadline ? String(applicationDeadline).trim() : undefined,
     description: String(description).trim(),
+    postedBy: String(postedBy).trim(),
   });
 
   const saved = await internship.save();
@@ -223,6 +275,90 @@ router.post('/internships', asyncHandler(async (req, res) => {
     success: true,
     message: 'Internship posted successfully', 
     internship: saved 
+  });
+}));
+
+// Get jobs posted by a specific user
+router.get('/my-jobs/:userId', asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const jobs = await Job.find({ postedBy: userId }).sort({ postedDate: -1 });
+  res.json(jobs);
+}));
+
+// Get internships posted by a specific user
+router.get('/my-internships/:userId', asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const internships = await Internship.find({ postedBy: userId }).sort({ postedDate: -1 });
+  res.json(internships);
+}));
+
+// Delete a job (only if posted by the user)
+router.delete('/jobs/:jobId', asyncHandler(async (req, res) => {
+  const { jobId } = req.params;
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ 
+      success: false,
+      message: 'User ID is required' 
+    });
+  }
+
+  const job = await Job.findById(jobId);
+  
+  if (!job) {
+    return res.status(404).json({ 
+      success: false,
+      message: 'Job not found' 
+    });
+  }
+
+  if (job.postedBy !== userId) {
+    return res.status(403).json({ 
+      success: false,
+      message: 'You can only delete jobs posted by you' 
+    });
+  }
+
+  await Job.findByIdAndDelete(jobId);
+  res.json({ 
+    success: true,
+    message: 'Job deleted successfully' 
+  });
+}));
+
+// Delete an internship (only if posted by the user)
+router.delete('/internships/:internshipId', asyncHandler(async (req, res) => {
+  const { internshipId } = req.params;
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ 
+      success: false,
+      message: 'User ID is required' 
+    });
+  }
+
+  const internship = await Internship.findById(internshipId);
+  
+  if (!internship) {
+    return res.status(404).json({ 
+      success: false,
+      message: 'Internship not found' 
+    });
+  }
+
+  if (internship.postedBy !== userId) {
+    return res.status(403).json({ 
+      success: false,
+      message: 'You can only delete internships posted by you' 
+    });
+  }
+
+  await Internship.findByIdAndDelete(internshipId);
+  res.json({ 
+    success: true,
+    message: 'Internship deleted successfully' 
   });
 }));
 

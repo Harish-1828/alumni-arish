@@ -81,6 +81,7 @@ a {
   display: flex;
   gap: 18px;
   align-items: center;
+  flex-wrap: wrap;
 }
 .topbar-btn {
   font-size: 1.19em;
@@ -102,6 +103,9 @@ a {
   border: 1px solid #d3d7dd;
   background: #ececec;
 }
+.manage-btn:hover {
+  background: #d8dce2;
+}
 .topbar-btn.green-btn {
   background: #44c352;
   color: #fff;
@@ -114,6 +118,30 @@ a {
 .topbar-btn:active {
   filter: brightness(.98);
 }
+
+.set-preferences-btn {
+  background: #1651a7 !important;
+  color: #fff !important;
+  border: none !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.set-preferences-btn:hover {
+  background: #0d3a7a !important;
+}
+
+.set-preferences-btn-icon {
+  font-size: 1.2em;
+}
+
+.preference-indicator {
+  margin-left: 8px;
+  font-size: 1.2em;
+  color: #44c352;
+}
+
 @media (max-width:900px) {
   .jobboard-topbar { margin-left: 0; justify-content: center; flex-wrap: wrap; }
 }
@@ -202,6 +230,11 @@ a {
 .sidebar-subitem:hover {
   background: #f0f4fa;
   color: #1c08f8;
+}
+.sidebar-subitem.active {
+  background: #e8f0ff;
+  color: #1c08f8;
+  font-weight: 600;
 }
 
 /* Job list panel */

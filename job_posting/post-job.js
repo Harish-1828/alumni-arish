@@ -35,6 +35,21 @@ document.getElementById('postJobForm').addEventListener('submit', async function
     msg.style.color = "#e22";
     return;
   }
+  
+  // Validate application deadline - should not be in the past
+  if (applicationDeadline) {
+    const deadlineDate = new Date(applicationDeadline);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    deadlineDate.setHours(0, 0, 0, 0);
+    
+    if (deadlineDate < today) {
+      msg.textContent = "Application deadline cannot be in the past.";
+      msg.style.color = "#e22";
+      return;
+    }
+  }
+  
   // Location is now optional
   // if (!location.length) {
   //   msg.textContent = "Please enter at least one location.";
@@ -45,6 +60,15 @@ document.getElementById('postJobForm').addEventListener('submit', async function
   // Submit
   msg.textContent = "Posting...";
   msg.style.color = "#444";
+  
+  // Get logged-in user
+  const loggedInUser = sessionStorage.getItem('loggedInUser');
+  if (!loggedInUser) {
+    msg.textContent = "You must be logged in to post a job.";
+    msg.style.color = "#e22";
+    return;
+  }
+  
   try {
   const res = await fetch('http://localhost:5000/api/jobs', {
       method: 'POST',
@@ -52,7 +76,7 @@ document.getElementById('postJobForm').addEventListener('submit', async function
       body: JSON.stringify({
         jobTitle, company, companyWebsite, experienceFrom, experienceTo,
         location, contactEmail, jobArea, skills, salary,
-        applicationDeadline, jobDescription
+        applicationDeadline, jobDescription, postedBy: loggedInUser
       })
     });
     if (res.ok) {
