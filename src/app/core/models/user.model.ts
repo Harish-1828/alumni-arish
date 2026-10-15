@@ -7,6 +7,8 @@ export interface AlumniUser {
   batch?: string;
   department?: string;
   role?: 'alumni' | 'admin' | 'student';
+  alumni_id?: string;
+  avatar?: string;
 }
 
 export interface AuthState {

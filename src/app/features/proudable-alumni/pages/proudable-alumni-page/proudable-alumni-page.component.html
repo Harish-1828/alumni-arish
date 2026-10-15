@@ -1,0 +1,32 @@
+<div class="proudable-container">
+  <header class="proudable-header">
+    <span class="badge-tag">Mepco Wall of Fame</span>
+    <h1>Proudable Alumni</h1>
+    <p class="proudable-subtitle">Celebrating our graduates who are leading transformative initiatives and excelling globally.</p>
+  </header>
+
+  <div class="proudable-grid">
+    @for (person of alumni(); track person._id || $index) {
+      <div class="proudable-card">
+        <div class="photo-wrapper">
+          <img [src]="person.photo || '/images/user.png'" [alt]="person.name" class="proudable-photo" />
+        </div>
+        <div class="card-details">
+          <span class="batch-pill">{{ person.batch }}</span>
+          <h3 class="alumni-name">{{ person.name }}</h3>
+          <p class="alumni-role">{{ person.designation }}</p>
+          @if (person.company) {
+            <p class="alumni-org"><i class="fas fa-building"></i> {{ person.company }}</p>
+          }
+          @if (person.achievements) {
+            <div class="achievements-box">
+              <i class="fas fa-trophy trophy-icon"></i>
+              <p>{{ person.achievements }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+

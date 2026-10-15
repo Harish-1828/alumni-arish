@@ -67,3 +67,4 @@ export class FriendsPageComponent {
     this.friendsService.removeFriend(id);
   }
 }
+

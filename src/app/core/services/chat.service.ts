@@ -53,3 +53,4 @@ export class ChatService {
     INITIAL_MESSAGES[contact.id].push(newMsg);
   }
 }
+

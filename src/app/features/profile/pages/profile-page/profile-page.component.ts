@@ -48,3 +48,4 @@ export class ProfilePageComponent {
     this.friendsService.sendInvite(alumnus.alumni_id, alumnus.name).subscribe();
   }
 }
+

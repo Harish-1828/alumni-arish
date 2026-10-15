@@ -1,0 +1,49 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="logo-box">
+      <img src="/images/logo.png" alt="Mepco Schlenk Engineering College Logo" class="login-logo" />
+    </div>
+
+    <h2 class="login-title">Alumni Portal Login</h2>
+    <p class="login-subtitle">Connect, collaborate, and give back to your alma mater</p>
+
+    <form (ngSubmit)="onLogin()" class="login-form">
+      <div class="input-group">
+        <label for="email">Email / Alumni ID</label>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="username / email"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-login" [disabled]="isLoading()">
+        @if (isLoading()) {
+          <span>Signing in...</span>
+        } @else {
+          <span>Sign In</span>
+        }
+      </button>
+
+      <div class="alternative-login">
+        <p>Need support accessing your alumni account? <a href="mailto:msec@mepcoeng.ac.in">Contact Alumni Cell</a></p>
+      </div>
+    </form>
+  </div>
+</div>
+

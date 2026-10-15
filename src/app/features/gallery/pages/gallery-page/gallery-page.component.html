@@ -1,0 +1,23 @@
+<div class="gallery-container">
+  <header class="gallery-header">
+    <span class="gallery-badge">Campus Archives</span>
+    <h1>Photo Gallery</h1>
+    <p class="gallery-subtitle">A walk down memory lane through campus milestones, reunions, and celebrations.</p>
+  </header>
+
+  <div class="gallery-grid">
+    @for (item of galleryItems; track item.id) {
+      <div class="gallery-item-card">
+        <div class="gallery-img-wrap">
+          <img [src]="item.imageUrl" [alt]="item.title" class="gallery-img" />
+          <span class="gallery-year">{{ item.year }}</span>
+        </div>
+        <div class="gallery-caption">
+          <span class="gallery-category">{{ item.category }}</span>
+          <h3 class="gallery-title">{{ item.title }}</h3>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+

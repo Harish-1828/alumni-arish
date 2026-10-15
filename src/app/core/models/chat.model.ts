@@ -17,3 +17,4 @@ export interface ChatContact {
   unreadCount?: number;
   online?: boolean;
 }
+

@@ -28,3 +28,4 @@ export interface CreateEventDto {
   posterUrl?: string;
   allowParticipation?: boolean;
 }
+

@@ -55,3 +55,4 @@ export class EventsPageComponent {
     this.selectedEvent.set(null);
   }
 }
+

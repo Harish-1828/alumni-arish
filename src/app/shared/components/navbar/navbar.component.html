@@ -2,7 +2,7 @@
   <div class="top-header">
     <div class="header-inner">
       <div class="brand-row">
-        <a routerLink="/fundraising" class="logo-link">
+        <a routerLink="/home" class="logo-link">
           <img
             src="/images/clg_logo.png"
             alt="Mepco Schlenk Engineering College Logo"
@@ -41,6 +41,15 @@
       <ul class="nav-links" [class.mobile-open]="isMobileMenuOpen()">
         <li>
           <a
+            routerLink="/home"
+            routerLinkActive="active-nav"
+            (click)="closeMobileMenu()"
+          >
+            HOME
+          </a>
+        </li>
+        <li>
+          <a
             routerLink="/profile"
             routerLinkActive="active-nav"
             (click)="closeMobileMenu()"
@@ -77,6 +86,33 @@
         </li>
         <li>
           <a
+            routerLink="/gallery"
+            routerLinkActive="active-nav"
+            (click)="closeMobileMenu()"
+          >
+            GALLERY
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/proudable-alumni"
+            routerLinkActive="active-nav"
+            (click)="closeMobileMenu()"
+          >
+            PROUDABLE ALUMNI
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/members"
+            routerLinkActive="active-nav"
+            (click)="closeMobileMenu()"
+          >
+            MEMBERS
+          </a>
+        </li>
+        <li>
+          <a
             routerLink="/chat"
             routerLinkActive="active-nav"
             (click)="closeMobileMenu()"
@@ -88,19 +124,9 @@
           <a
             routerLink="/fundraising"
             routerLinkActive="active-nav"
-            [routerLinkActiveOptions]="{ exact: true }"
             (click)="closeMobileMenu()"
           >
             FUND RAISING
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/contributions"
-            routerLinkActive="active-nav"
-            (click)="closeMobileMenu()"
-          >
-            DONATIONS LEDGER
           </a>
         </li>
         <li>
@@ -110,7 +136,7 @@
             class="admin-badge-nav"
             (click)="closeMobileMenu()"
           >
-            ADMIN PORTAL
+            ADMIN
           </a>
         </li>
         <li class="nav-right">
@@ -122,7 +148,7 @@
             </div>
           } @else {
             <a
-              routerLink="/login/login_page.html"
+              routerLink="/login"
               class="login-nav-btn"
               (click)="closeMobileMenu()"
             >

@@ -17,3 +17,4 @@ export interface AlumniFriend {
   avatar?: string;
   online?: boolean;
 }
+

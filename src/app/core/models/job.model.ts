@@ -34,3 +34,4 @@ export interface InternshipPosting {
   postedDate?: string | Date;
   postedBy: string;
 }
+

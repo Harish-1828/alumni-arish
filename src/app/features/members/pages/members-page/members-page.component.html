@@ -1,0 +1,29 @@
+<div class="members-container">
+  <header class="members-header">
+    <span class="badge-role">Faculty & Leadership</span>
+    <h1>Faculty Advisors & Coordinators</h1>
+    <p class="members-subtitle">Meet the dedicated faculty mentors and coordinators who steward the Mepco Alumni Network.</p>
+  </header>
+
+  <div class="members-grid">
+    @for (member of members(); track member._id || $index) {
+      <div class="member-card">
+        <div class="member-photo-wrap">
+          <img [src]="member.photo || '/images/user.png'" [alt]="member.name" class="member-photo" />
+        </div>
+        <div class="member-info">
+          <span class="member-role-tag">{{ member.role }}</span>
+          <h3 class="member-name">{{ member.name }}</h3>
+          <p class="member-designation">{{ member.designation }}</p>
+          @if (member.department) {
+            <p class="member-dept"><i class="fas fa-university"></i> {{ member.department }}</p>
+          }
+          @if (member.experience) {
+            <span class="member-exp"><i class="fas fa-award"></i> {{ member.experience }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+

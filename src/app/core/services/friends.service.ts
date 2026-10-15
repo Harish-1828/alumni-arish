@@ -162,3 +162,4 @@ export class FriendsService {
     this.notify.info('Friend connection removed');
   }
 }
+
