@@ -1,0 +1,138 @@
+<div class="detail-page-container">
+  @if (loading()) {
+    <div class="loading-wrap">
+      <div class="spinner"></div>
+      <p>Loading campaign details...</p>
+    </div>
+  } @else if (!fund()) {
+    <div class="not-found-card">
+      <span class="error-icon">🔍</span>
+      <h2>Campaign Not Found</h2>
+      <p>The requested endowment drive does not exist or may have been retired.</p>
+      <a routerLink="/fundraising" class="btn btn-primary">Return to Campaigns</a>
+    </div>
+  } @else {
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb">
+      <a routerLink="/fundraising">Fundraising</a>
+      <span class="sep">/</span>
+      <span class="current">{{ fund()?.title }}</span>
+    </nav>
+
+    <!-- MAIN HERO LAYOUT -->
+    <div class="fund-grid-layout">
+      <!-- LEFT: Image & Story -->
+      <div class="fund-main-col">
+        <div class="media-container">
+          @if (fund()?.image) {
+            <img [src]="fund()?.image" [alt]="fund()?.title" class="hero-image" />
+          } @else {
+            <div class="hero-placeholder">
+              <span>🏛️ Mepco Alumni Initiative</span>
+            </div>
+          }
+        </div>
+
+        <article class="story-article">
+          <h1 class="fund-heading">{{ fund()?.title }}</h1>
+
+          <div class="meta-tags">
+            <span class="badge">Official College Fund</span>
+            <span class="badge badge-green">80G Tax Deductible</span>
+            <span class="badge badge-blue">{{ fund()?.contributors || 0 }} Donors</span>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <h3>About this Initiative</h3>
+          <p class="story-text">{{ fund()?.description }}</p>
+
+          <div class="highlights-box">
+            <h4>Direct Impact of Your Support:</h4>
+            <ul>
+              <li>Procurement of specialized lab and research apparatus</li>
+              <li>Tuition waivers for merit-cum-means scholars</li>
+              <li>Transparent financial auditing by Mepco Alumni Trust</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+
+      <!-- RIGHT: Sticky Donation & Progress Card -->
+      <div class="fund-sidebar-col">
+        <div class="funding-card sticky-card">
+          <div class="financial-headline">
+            <span class="amount-large">₹{{ (fund()?.raised || 0) | number: '1.0-0' }}</span>
+            <span class="goal-subtext">raised of ₹{{ (fund()?.goal || 0) | number: '1.0-0' }} goal</span>
+          </div>
+
+          <app-progress-bar
+            [current]="fund()?.raised || 0"
+            [target]="fund()?.goal || 1"
+            height="10px"
+          />
+
+          <div class="stats-row">
+            <div class="stat-item">
+              <span class="stat-num">{{ fund()?.contributors || 0 }}</span>
+              <span class="stat-lbl">Contributors</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">
+                {{ fund()?.goal ? (Math.round(((fund()?.raised || 0) / (fund()?.goal || 1)) * 100)) : 0 }}%
+              </span>
+              <span class="stat-lbl">Achieved</span>
+            </div>
+          </div>
+
+          <div class="cta-actions">
+            <button (click)="openDonateModal()" class="btn btn-donate-large">
+              Contribute to this Fund
+            </button>
+            <a
+              [routerLink]="['/contribute']"
+              [queryParams]="{ fundId: fund()?._id || fund()?.id, title: fund()?.title }"
+              class="btn btn-link"
+            >
+              Open Dedicated Donation Form ↗
+            </a>
+          </div>
+
+          <div class="trust-notice">
+            <span class="lock-icon">🔒</span>
+            <p>Guaranteed secure payment via encrypted 256-bit gateway. Instant tax invoice generated.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT CONTRIBUTORS FOR THIS CAMPAIGN -->
+    <div class="campaign-contributions-section">
+      <app-contribution-table
+        [contributions]="contributions()"
+        title="Donors for this Campaign"
+        [showSearch]="false"
+      />
+    </div>
+  }
+</div>
+
+<!-- DONATION MODAL -->
+<app-modal
+  [isOpen]="isDonateModalOpen()"
+  title="Contribute to Campaign"
+  maxWidth="740px"
+  (closed)="closeDonateModal()"
+>
+  <div modal-body>
+    @if (fund()) {
+      <app-donation-form
+        [fundId]="fund()?._id || fund()?.id || ''"
+        [fundTitle]="fund()?.title || ''"
+        (submitted)="onDonationSuccess()"
+        (cancelled)="closeDonateModal()"
+      />
+    }
+  </div>
+</app-modal>
+

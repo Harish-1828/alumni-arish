@@ -1,0 +1,302 @@
+<div class="admin-page">
+  <div class="admin-container">
+    <!-- HEADER -->
+    <div class="admin-header">
+      <div>
+        <nav class="breadcrumb">
+          <a routerLink="/fundraising">Fundraising</a>
+          <span class="sep">/</span>
+          <span class="current">Admin Portal</span>
+        </nav>
+        <h1 class="page-title">Fundraising Campaigns Management</h1>
+        <p class="page-sub">Create, edit, audit, and track Mepco alumni endowment initiatives.</p>
+      </div>
+
+      <div class="header-actions">
+        <a routerLink="/contributions" class="btn btn-secondary">
+          Audit All Donations
+        </a>
+        <button (click)="openCreateModal()" class="btn btn-primary">
+          + New Campaign
+        </button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <app-stat-card
+        icon="📊"
+        label="Total Active Drives"
+        [value]="allFunds().length"
+        theme="blue"
+      />
+      <app-stat-card
+        icon="💰"
+        label="Total Collected"
+        [value]="stats().totalRaised | number: '1.0-0'"
+        prefix="₹"
+        theme="green"
+      />
+      <app-stat-card
+        icon="🎯"
+        label="Total Endowment Target"
+        [value]="stats().totalGoal | number: '1.0-0'"
+        prefix="₹"
+        theme="amber"
+      />
+      <app-stat-card
+        icon="👥"
+        label="Alumni Participated"
+        [value]="stats().totalContributors"
+        theme="purple"
+      />
+    </div>
+
+    <!-- TABLE SECTION -->
+    <div class="table-card">
+      <div class="table-bar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Filter campaigns by name or description..."
+            [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)"
+          />
+        </div>
+
+        <span class="count-label">
+          Showing {{ filteredFunds().length }} of {{ allFunds().length }} initiatives
+        </span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th scope="col">Campaign Title</th>
+              <th scope="col">Goal Target</th>
+              <th scope="col">Funds Raised</th>
+              <th scope="col">Progress</th>
+              <th scope="col">Donors</th>
+              <th scope="col" class="text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (filteredFunds().length === 0) {
+              <tr>
+                <td colspan="6" class="text-center py-8">
+                  <div class="empty-state">
+                    <span class="empty-icon">📂</span>
+                    <p>No fundraising campaigns found matching your query.</p>
+                  </div>
+                </td>
+              </tr>
+            } @else {
+              @for (fund of filteredFunds(); track fund._id || fund.id) {
+                <tr>
+                  <td class="campaign-title-cell">
+                    <div class="title-with-image">
+                      @if (fund.image) {
+                        <img [src]="fund.image" [alt]="fund.title" class="thumb-img" />
+                      } @else {
+                        <div class="thumb-placeholder">🏛️</div>
+                      }
+                      <div>
+                        <strong>{{ fund.title }}</strong>
+                        <p class="description-snippet">{{ fund.description }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="amount-cell">₹{{ (fund.goal || 0) | number: '1.0-0' }}</td>
+                  <td class="amount-cell raised-col">₹{{ (fund.raised || 0) | number: '1.0-0' }}</td>
+                  <td class="progress-cell">
+                    <app-progress-bar
+                      [current]="fund.raised"
+                      [target]="fund.goal"
+                      height="6px"
+                      [showLabel]="false"
+                    />
+                  </td>
+                  <td class="donors-cell">{{ fund.contributors || 0 }} alumni</td>
+                  <td class="actions-cell">
+                    <div class="btn-group">
+                      <a
+                        [routerLink]="['/fundraising', fund._id || fund.id]"
+                        class="btn-icon"
+                        title="View Public Campaign"
+                      >
+                        👁️
+                      </a>
+                      <a
+                        [routerLink]="['/contribute']"
+                        [queryParams]="{ fundId: fund._id || fund.id, title: fund.title }"
+                        class="btn-icon btn-donate"
+                        title="Direct Donate"
+                      >
+                        💳
+                      </a>
+                      <button
+                        (click)="openEditModal(fund)"
+                        class="btn-icon btn-edit"
+                        title="Edit Campaign"
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        (click)="openDeleteModal(fund)"
+                        class="btn-icon btn-delete"
+                        title="Delete Campaign"
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE CAMPAIGN MODAL -->
+<app-modal
+  [isOpen]="isCreateModalOpen()"
+  title="Create New Endowment Campaign"
+  maxWidth="640px"
+  (closed)="closeModals()"
+>
+  <div modal-body>
+    <form [formGroup]="fundForm" class="modal-form">
+      <div class="form-group">
+        <label for="createTitle">Campaign Title *</label>
+        <input
+          id="createTitle"
+          type="text"
+          formControlName="title"
+          placeholder="e.g. Mechanical Department CAD/CAM Lab Upgrade"
+        />
+        @if (fundForm.get('title')?.invalid && fundForm.get('title')?.touched) {
+          <span class="form-error">Title must be at least 3 characters.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="createGoal">Fundraising Target Goal (INR) *</label>
+        <input
+          id="createGoal"
+          type="number"
+          formControlName="goal"
+          placeholder="e.g. 500000"
+        />
+        @if (fundForm.get('goal')?.invalid && fundForm.get('goal')?.touched) {
+          <span class="form-error">Goal must be at least ₹1,000.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="createImage">Banner Image URL (Optional)</label>
+        <input
+          id="createImage"
+          type="url"
+          formControlName="image"
+          placeholder="https://example.com/photo.jpg"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="createDescription">Description & Purpose *</label>
+        <textarea
+          id="createDescription"
+          rows="4"
+          formControlName="description"
+          placeholder="Describe how the funds will directly benefit Mepco students and research labs..."
+        ></textarea>
+        @if (fundForm.get('description')?.invalid && fundForm.get('description')?.touched) {
+          <span class="form-error">Description must be at least 10 characters.</span>
+        }
+      </div>
+    </form>
+  </div>
+  <div modal-footer>
+    <button (click)="closeModals()" class="btn btn-secondary" [disabled]="isSaving()">
+      Cancel
+    </button>
+    <button (click)="onCreateSubmit()" class="btn btn-primary" [disabled]="isSaving()">
+      {{ isSaving() ? 'Creating...' : 'Create Campaign' }}
+    </button>
+  </div>
+</app-modal>
+
+<!-- EDIT CAMPAIGN MODAL -->
+<app-modal
+  [isOpen]="isEditModalOpen()"
+  title="Edit Endowment Campaign"
+  maxWidth="640px"
+  (closed)="closeModals()"
+>
+  <div modal-body>
+    <form [formGroup]="fundForm" class="modal-form">
+      <div class="form-group">
+        <label for="editTitle">Campaign Title *</label>
+        <input id="editTitle" type="text" formControlName="title" />
+      </div>
+
+      <div class="form-group">
+        <label for="editGoal">Fundraising Target Goal (INR) *</label>
+        <input id="editGoal" type="number" formControlName="goal" />
+      </div>
+
+      <div class="form-group">
+        <label for="editImage">Banner Image URL (Optional)</label>
+        <input id="editImage" type="url" formControlName="image" />
+      </div>
+
+      <div class="form-group">
+        <label for="editDescription">Description & Purpose *</label>
+        <textarea id="editDescription" rows="4" formControlName="description"></textarea>
+      </div>
+    </form>
+  </div>
+  <div modal-footer>
+    <button (click)="closeModals()" class="btn btn-secondary" [disabled]="isSaving()">
+      Cancel
+    </button>
+    <button (click)="onEditSubmit()" class="btn btn-primary" [disabled]="isSaving()">
+      {{ isSaving() ? 'Saving Changes...' : 'Save Changes' }}
+    </button>
+  </div>
+</app-modal>
+
+<!-- DELETE CONFIRMATION MODAL -->
+<app-modal
+  [isOpen]="isDeleteModalOpen()"
+  title="Confirm Delete Campaign"
+  maxWidth="480px"
+  (closed)="closeModals()"
+>
+  <div modal-body>
+    <div class="delete-warning">
+      <span class="warning-icon">⚠️</span>
+      <p>
+        Are you sure you want to permanently delete
+        <strong>"{{ deletingFund()?.title }}"</strong>?
+      </p>
+      <p class="sub-warning">
+        This action cannot be undone. Associated contribution records will remain in the financial audit ledger.
+      </p>
+    </div>
+  </div>
+  <div modal-footer>
+    <button (click)="closeModals()" class="btn btn-secondary" [disabled]="isSaving()">
+      Cancel
+    </button>
+    <button (click)="confirmDelete()" class="btn btn-danger" [disabled]="isSaving()">
+      {{ isSaving() ? 'Deleting...' : 'Delete Campaign' }}
+    </button>
+  </div>
+</app-modal>
+

@@ -1,0 +1,63 @@
+<article class="fund-card">
+  @if (fund().image) {
+    <div class="card-media">
+      <img [src]="fund().image" [alt]="fund().title" loading="lazy" />
+      <span class="category-badge">Endowment</span>
+    </div>
+  } @else {
+    <div class="card-media card-media-placeholder">
+      <div class="placeholder-icon">🏛️</div>
+      <span class="category-badge">Alumni Initiative</span>
+    </div>
+  }
+
+  <div class="card-body">
+    <div class="card-header-info">
+      <h3 class="fund-title">
+        <a [routerLink]="['/fundraising', fundId()]">{{ fund().title }}</a>
+      </h3>
+      <p class="fund-desc">{{ fund().description }}</p>
+    </div>
+
+    <div class="fund-progress-section">
+      <app-progress-bar
+        [current]="fund().raised"
+        [target]="fund().goal"
+        height="8px"
+      />
+
+      <div class="fund-financials">
+        <div class="financial-item">
+          <span class="financial-label">Raised</span>
+          <span class="financial-amount raised">₹{{ formattedRaised() }}</span>
+        </div>
+        <div class="financial-item text-right">
+          <span class="financial-label">Target Goal</span>
+          <span class="financial-amount goal">₹{{ formattedGoal() }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <div class="donors-meta">
+        <span class="donor-icon">👥</span>
+        <span class="donor-count">
+          <strong>{{ fund().contributors || 0 }}</strong> Alumni Donors
+        </span>
+      </div>
+
+      <div class="card-actions">
+        <a [routerLink]="['/fundraising', fundId()]" class="btn btn-outline">
+          Details
+        </a>
+        <a
+          [routerLink]="['/contribute']"
+          [queryParams]="{ fundId: fundId(), title: fund().title }"
+          class="btn btn-primary"
+        >
+          Donate
+        </a>
+      </div>
+    </div>
+  </div>
+</article>

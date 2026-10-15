@@ -1,0 +1,99 @@
+<section class="contrib-card">
+  <div class="table-header">
+    <div class="title-meta">
+      <h3 class="table-title">{{ title() }}</h3>
+      <span class="count-badge">
+        {{ filteredContributions().length }} donations · Total: ₹{{ totalFilteredAmount() | number: '1.0-0' }}
+      </span>
+    </div>
+
+    @if (showSearch()) {
+      <div class="filters-row">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Search donors, city, notes..."
+            [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)"
+          />
+        </div>
+
+        <div class="filter-selects">
+          <select [ngModel]="selectedMode()" (ngModelChange)="selectedMode.set($event)">
+            <option value="all">All Payment Modes</option>
+            <option value="online">Online</option>
+            <option value="upi">UPI</option>
+            <option value="card">Card</option>
+            <option value="netbanking">Net Banking</option>
+            <option value="cheque">Cheque</option>
+            <option value="cash">Cash</option>
+          </select>
+
+          <select [ngModel]="sortOrder()" (ngModelChange)="sortOrder.set($event)">
+            <option value="newest">Most Recent</option>
+            <option value="highest">Highest Amount</option>
+          </select>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Donor</th>
+          <th scope="col">Email</th>
+          <th scope="col">Payment Mode</th>
+          <th scope="col">Location</th>
+          <th scope="col">Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (filteredContributions().length === 0) {
+          <tr class="empty-row">
+            <td colspan="7">
+              <div class="empty-state">
+                <span class="empty-icon">🤝</span>
+                <p>No contributions found matching the criteria.</p>
+              </div>
+            </td>
+          </tr>
+        } @else {
+          @for (c of filteredContributions(); track c._id || $index) {
+            <tr>
+              <td class="date-cell">{{ formatDate(c.createdAt) }}</td>
+              <td class="amount-cell">₹{{ c.amount | number: '1.0-0' }}</td>
+              <td class="donor-cell">
+                <div class="donor-name-wrap">
+                  <span class="donor-avatar" [class.anon]="c.anonymous">
+                    {{ c.anonymous ? '🔒' : '👤' }}
+                  </span>
+                  <span class="donor-name" [class.italic]="c.anonymous">
+                    {{ getDonorName(c) }}
+                  </span>
+                </div>
+              </td>
+              <td class="email-cell">{{ getMaskedEmail(c) }}</td>
+              <td class="mode-cell">
+                <span class="mode-badge" [class]="'badge-' + c.transactionMode">
+                  {{ c.transactionMode | uppercase }}
+                </span>
+              </td>
+              <td class="location-cell">
+                {{ c.city ? c.city + (c.pincode ? ' - ' + c.pincode : '') : '—' }}
+              </td>
+              <td class="note-cell" [title]="c.notes || ''">
+                {{ c.notes || '—' }}
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+

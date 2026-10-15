@@ -1,0 +1,20 @@
+<div class="stat-card" [class]="'theme-' + theme()">
+  <div class="stat-icon-wrapper">
+    <span class="stat-icon">{{ icon() }}</span>
+  </div>
+  <div class="stat-content">
+    <p class="stat-label">{{ label() }}</p>
+    <div class="stat-value-row">
+      @if (prefix()) {
+        <span class="stat-prefix">{{ prefix() }}</span>
+      }
+      <span class="stat-number">{{ value() }}</span>
+      @if (suffix()) {
+        <span class="stat-suffix">{{ suffix() }}</span>
+      }
+    </div>
+    @if (trend()) {
+      <p class="stat-trend">{{ trend() }}</p>
+    }
+  </div>
+</div>
