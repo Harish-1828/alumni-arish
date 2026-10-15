@@ -41,7 +41,8 @@
       <ul class="nav-links" [class.mobile-open]="isMobileMenuOpen()">
         <li>
           <a
-            routerLink="/alumni profile/alumni_profile.html"
+            routerLink="/profile"
+            routerLinkActive="active-nav"
             (click)="closeMobileMenu()"
           >
             PROFILE
@@ -49,7 +50,8 @@
         </li>
         <li>
           <a
-            routerLink="/friends/friends.html"
+            routerLink="/friends"
+            routerLinkActive="active-nav"
             (click)="closeMobileMenu()"
           >
             FRIENDS
@@ -57,7 +59,8 @@
         </li>
         <li>
           <a
-            routerLink="/job_posting/job-sidebar.html"
+            routerLink="/jobs"
+            routerLinkActive="active-nav"
             (click)="closeMobileMenu()"
           >
             JOB POSTING
@@ -65,7 +68,8 @@
         </li>
         <li>
           <a
-            routerLink="/event page/event_page.html"
+            routerLink="/events"
+            routerLinkActive="active-nav"
             (click)="closeMobileMenu()"
           >
             EVENTS
@@ -73,18 +77,11 @@
         </li>
         <li>
           <a
-            routerLink="/gallery/gallery.html"
+            routerLink="/chat"
+            routerLinkActive="active-nav"
             (click)="closeMobileMenu()"
           >
-            GALLERY
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/proudable_alumni/proudable_alumni.html"
-            (click)="closeMobileMenu()"
-          >
-            PROUDABLE ALUMNI
+            MESSAGES
           </a>
         </li>
         <li>

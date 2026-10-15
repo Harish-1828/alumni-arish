@@ -1,0 +1,92 @@
+<div class="chat-page-container">
+  <div class="chat-shell">
+    <!-- LEFT SIDEBAR -->
+    <aside class="chat-sidebar">
+      <div class="sidebar-header">
+        <h2>Messages</h2>
+        <span class="online-status-badge">Live</span>
+      </div>
+
+      <div class="contacts-list">
+        @for (contact of contacts(); track contact.id) {
+          <div
+            class="contact-item"
+            [class.active]="activeContact()?.id === contact.id"
+            (click)="selectContact(contact)"
+          >
+            <div class="contact-avatar-wrap">
+              <span class="contact-avatar">{{ contact.name.charAt(0) }}</span>
+              @if (contact.online) {
+                <span class="online-indicator"></span>
+              }
+            </div>
+            <div class="contact-meta">
+              <div class="contact-top">
+                <span class="contact-name">{{ contact.name }}</span>
+                <span class="contact-time">{{ contact.lastMessageTime }}</span>
+              </div>
+              <p class="contact-snippet">{{ contact.lastMessage }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </aside>
+
+    <!-- MAIN CHAT PANE -->
+    <section class="chat-main">
+      @if (activeContact()) {
+        <!-- CHAT HEADER -->
+        <div class="chat-top-bar">
+          <div class="header-avatar-wrap">
+            <span class="header-avatar">{{ activeContact()?.name?.charAt(0) }}</span>
+            @if (activeContact()?.online) {
+              <span class="online-indicator"></span>
+            }
+          </div>
+          <div>
+            <h3 class="header-name">{{ activeContact()?.name }}</h3>
+            <span class="header-sub">
+              {{ activeContact()?.online ? 'Online now' : 'Active recently' }} · {{ activeContact()?.department }}
+            </span>
+          </div>
+        </div>
+
+        <!-- MESSAGES THREAD -->
+        <div class="messages-viewport">
+          @for (msg of messages(); track msg.timestamp) {
+            <div
+              class="message-bubble-row"
+              [class.sent]="msg.senderId === 'me'"
+              [class.received]="msg.senderId !== 'me'"
+            >
+              <div class="message-bubble">
+                <p class="bubble-text">{{ msg.message }}</p>
+                <span class="bubble-time">{{ msg.timestamp | date: 'shortTime' }}</span>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- INPUT BOX -->
+        <div class="message-composer">
+          <input
+            type="text"
+            placeholder="Type your message to alumni..."
+            [ngModel]="messageInput()"
+            (ngModelChange)="messageInput.set($event)"
+            (keyup.enter)="send()"
+          />
+          <button (click)="send()" class="btn-send" [disabled]="!messageInput().trim()">
+            Send ➔
+          </button>
+        </div>
+      } @else {
+        <div class="no-chat-selected">
+          <span>💬</span>
+          <h3>Select a conversation</h3>
+          <p>Choose an alumni friend from the left sidebar to start messaging.</p>
+        </div>
+      }
+    </section>
+  </div>
+</div>

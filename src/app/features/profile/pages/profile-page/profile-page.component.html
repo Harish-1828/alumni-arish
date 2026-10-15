@@ -1,0 +1,75 @@
+<div class="profile-page-container">
+  <!-- USER HERO CARD -->
+  <div class="user-hero-card">
+    <div class="hero-avatar">
+      <span>👤</span>
+    </div>
+    <div class="hero-details">
+      <div class="name-row">
+        <h1 class="user-title">{{ currentUser()?.name || 'Mepco Alumnus' }}</h1>
+        <span class="role-tag">{{ currentUser()?.role || 'Alumni Member' | uppercase }}</span>
+      </div>
+      <p class="user-sub">
+        {{ currentUser()?.department || 'Department of Computer Science & Engineering' }} · Batch {{ currentUser()?.batch || '2020-2024' }}
+      </p>
+      <div class="user-info-badges">
+        <span class="info-badge">📧 {{ currentUser()?.email || 'alumni@mepcoeng.ac.in' }}</span>
+        <span class="info-badge">🏛️ Mepco Schlenk Engineering College</span>
+        <span class="info-badge">🎓 Bachelor of Engineering</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIRECTORY SECTION -->
+  <div class="directory-section">
+    <div class="dir-header">
+      <div>
+        <h2 class="dir-title">Alumni Directory & Records</h2>
+        <p class="dir-sub">Explore peers across departments, graduation years, and industry roles.</p>
+      </div>
+
+      <div class="dir-filters">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Search alumni by name, roll no, company..."
+            [ngModel]="directorySearch()"
+            (ngModelChange)="directorySearch.set($event)"
+          />
+        </div>
+
+        <select [ngModel]="selectedDept()" (ngModelChange)="selectedDept.set($event)" class="dept-select">
+          <option value="all">All Departments</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="Electronics">ECE</option>
+          <option value="Mechanical">Mechanical</option>
+          <option value="Electrical">EEE</option>
+          <option value="Civil">Civil</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="directory-grid">
+      @for (alumnus of filteredDirectory(); track alumnus.alumni_id) {
+        <div class="alumni-card">
+          <div class="card-avatar">{{ alumnus.name.charAt(0) }}</div>
+          <div class="alumni-meta">
+            <h3 class="alumni-name">{{ alumnus.name }}</h3>
+            <span class="alumni-id-badge">{{ alumnus.alumni_id }}</span>
+            <p class="alumni-dept">{{ alumnus.department }}</p>
+            <span class="alumni-batch">Class of {{ alumnus.batch }}</span>
+            @if (alumnus.status) {
+              <p class="alumni-status">💼 {{ alumnus.status }}</p>
+            }
+          </div>
+          <div class="alumni-action">
+            <button (click)="connect(alumnus)" class="btn btn-connect">
+              + Send Request
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

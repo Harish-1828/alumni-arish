@@ -1,0 +1,143 @@
+<div class="friends-page-container">
+  <!-- HEADER -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Alumni Connections & Friends</h1>
+      <p class="page-subtitle">Connect, network, and stay in touch with your fellow Mepco engineering graduates.</p>
+    </div>
+
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        placeholder="Search by name, department, batch..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+      />
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-nav">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'connections'"
+      (click)="activeTab.set('connections')"
+    >
+      My Connections ({{ friends().length }})
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'requests'"
+      (click)="activeTab.set('requests')"
+    >
+      Pending Requests
+      @if (invitations().length > 0) {
+        <span class="badge-count">{{ invitations().length }}</span>
+      }
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'find'"
+      (click)="activeTab.set('find')"
+    >
+      Discover Alumni
+    </button>
+  </div>
+
+  <!-- TAB CONTENT -->
+  <div class="tab-content">
+    <!-- TAB 1: CONNECTIONS -->
+    @if (activeTab() === 'connections') {
+      @if (filteredFriends().length === 0) {
+        <div class="empty-card">
+          <span class="empty-icon">👥</span>
+          <h3>No Connections Found</h3>
+          <p>You haven't added any connections matching your search. Check "Discover Alumni" to find peers!</p>
+          <button (click)="activeTab.set('find')" class="btn btn-primary">Find Alumni</button>
+        </div>
+      } @else {
+        <div class="friends-grid">
+          @for (friend of filteredFriends(); track friend.id) {
+            <div class="friend-card">
+              <div class="avatar-wrap">
+                <span class="avatar-letter">{{ friend.name.charAt(0) }}</span>
+                @if (friend.online) {
+                  <span class="online-dot" title="Online now"></span>
+                }
+              </div>
+              <div class="friend-info">
+                <h3 class="friend-name">{{ friend.name }}</h3>
+                <p class="friend-dept">{{ friend.department }}</p>
+                <span class="friend-batch">Batch {{ friend.batch }}</span>
+              </div>
+              <div class="friend-actions">
+                <a routerLink="/chat" class="btn btn-message">
+                  💬 Message
+                </a>
+                <button (click)="removeFriend(friend.id)" class="btn btn-remove" title="Remove Connection">
+                  ✕
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+
+    <!-- TAB 2: INVITATIONS -->
+    @if (activeTab() === 'requests') {
+      @if (invitations().length === 0) {
+        <div class="empty-card">
+          <span class="empty-icon">📬</span>
+          <h3>No Pending Invitations</h3>
+          <p>You have no pending friend requests from other alumni at this time.</p>
+        </div>
+      } @else {
+        <div class="invitations-list">
+          @for (inv of invitations(); track inv._id || inv.senderId) {
+            <div class="invitation-item">
+              <div class="inv-left">
+                <span class="inv-avatar">{{ inv.senderName.charAt(0) }}</span>
+                <div>
+                  <h4 class="inv-name">{{ inv.senderName }}</h4>
+                  <p class="inv-sub">Sent you a friend request on Mepco Alumni Network</p>
+                </div>
+              </div>
+              <div class="inv-actions">
+                <button (click)="acceptRequest(inv)" class="btn btn-accept">
+                  ✓ Accept Request
+                </button>
+                <button (click)="rejectRequest(inv._id || '')" class="btn btn-decline">
+                  Decline
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+
+    <!-- TAB 3: DISCOVER -->
+    @if (activeTab() === 'find') {
+      <div class="discover-grid">
+        @for (alumnus of discoverAlumni(); track alumnus.alumni_id) {
+          <div class="discover-card">
+            <div class="disc-avatar">{{ alumnus.name.charAt(0) }}</div>
+            <div class="disc-info">
+              <h4>{{ alumnus.name }}</h4>
+              <p class="dept-text">{{ alumnus.department }}</p>
+              <span class="batch-badge">Batch {{ alumnus.batch }}</span>
+              @if (alumnus.status) {
+                <p class="status-quote">"{{ alumnus.status }}"</p>
+              }
+            </div>
+            <button (click)="sendConnect(alumnus)" class="btn btn-connect">
+              + Connect
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

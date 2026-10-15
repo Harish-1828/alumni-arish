@@ -1,0 +1,105 @@
+<div class="events-page-container">
+  <!-- HEADER -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Alumni Reunions & Events</h1>
+      <p class="page-subtitle">Participate in symposiums, silver jubilee reunions, and student mentorship days.</p>
+    </div>
+
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        placeholder="Search events, city, topics..."
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+      />
+    </div>
+  </div>
+
+  <!-- EVENTS GRID -->
+  <div class="events-grid">
+    @for (event of filteredEvents(); track event._id || event.id) {
+      <div class="event-card">
+        @if (event.posterUrl) {
+          <div class="event-image-wrap">
+            <img [src]="event.posterUrl" [alt]="event.title" class="event-poster" />
+            <div class="date-badge">
+              <span class="day">{{ event.date | date: 'dd' }}</span>
+              <span class="mon">{{ event.date | date: 'MMM' }}</span>
+            </div>
+          </div>
+        }
+
+        <div class="event-content">
+          <h3 class="event-title">{{ event.title }}</h3>
+
+          <div class="event-meta">
+            <div class="meta-item">
+              <span class="meta-icon">📍</span>
+              <span>{{ event.location }}</span>
+            </div>
+            @if (event.time) {
+              <div class="meta-item">
+                <span class="meta-icon">⏰</span>
+                <span>{{ event.time }}</span>
+              </div>
+            }
+          </div>
+
+          <p class="event-description">{{ event.description }}</p>
+
+          <div class="event-footer">
+            <div class="participant-count">
+              <span class="icon">👥</span>
+              <strong>{{ event.participantCount || 0 }}</strong> Alumni Registered
+            </div>
+
+            <div class="actions">
+              <button (click)="viewParticipants(event)" class="btn btn-secondary">
+                Attendees
+              </button>
+              <button (click)="register(event)" class="btn btn-primary">
+                Register
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- PARTICIPANTS MODAL -->
+<app-modal
+  [isOpen]="isParticipantModalOpen()"
+  title="Event Participants"
+  maxWidth="540px"
+  (closed)="closeModal()"
+>
+  <div modal-body>
+    <div class="modal-event-title">
+      <h4>{{ selectedEvent()?.title }}</h4>
+      <p>Registered Alumni Attendees</p>
+    </div>
+
+    <div class="attendees-list">
+      @if (currentParticipants().length === 0) {
+        <p class="empty-text">No registered participants recorded yet. Be the first to RSVP!</p>
+      } @else {
+        @for (p of currentParticipants(); track p.alumniId) {
+          <div class="attendee-row">
+            <span class="att-avatar">{{ p.alumniName.charAt(0) }}</span>
+            <div class="att-info">
+              <strong>{{ p.alumniName }}</strong>
+              <span class="att-time">Registered for event</span>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+  <div modal-footer>
+    <button (click)="closeModal()" class="btn btn-primary">Close</button>
+  </div>
+</app-modal>

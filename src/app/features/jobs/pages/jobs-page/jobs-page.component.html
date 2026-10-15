@@ -1,0 +1,202 @@
+<div class="jobs-page-container">
+  <!-- HEADER -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Alumni Career & Placement Board</h1>
+      <p class="page-subtitle">Exclusive hiring opportunities, referrals, and internships posted by Mepco alumni.</p>
+    </div>
+
+    <div class="header-actions">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          placeholder="Search jobs, skills, companies..."
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+        />
+      </div>
+      <button (click)="openPostModal()" class="btn btn-primary">
+        + Post Opportunity
+      </button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-nav">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'jobs'"
+      (click)="activeTab.set('jobs')"
+    >
+      Full-Time Jobs ({{ jobs().length }})
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'internships'"
+      (click)="activeTab.set('internships')"
+    >
+      Internships ({{ internships().length }})
+    </button>
+  </div>
+
+  <!-- JOBS LIST -->
+  @if (activeTab() === 'jobs') {
+    <div class="opportunities-grid">
+      @for (job of filteredJobs(); track job._id || job.id) {
+        <div class="job-card">
+          <div class="card-head">
+            <div class="company-badge">{{ job.company.charAt(0) }}</div>
+            <div class="role-info">
+              <h3 class="job-role">{{ job.jobTitle }}</h3>
+              <p class="company-name">
+                {{ job.company }}
+                @if (job.companyWebsite) {
+                  · <a [href]="job.companyWebsite" target="_blank" rel="noopener">Website ↗</a>
+                }
+              </p>
+            </div>
+          </div>
+
+          <div class="tags-row">
+            <span class="pill pill-blue">📍 {{ job.location.join(', ') }}</span>
+            @if (job.salary) {
+              <span class="pill pill-green">💰 {{ job.salary }}</span>
+            }
+            @if (job.experienceFrom !== undefined) {
+              <span class="pill pill-gray">💼 {{ job.experienceFrom }} - {{ job.experienceTo }} yrs exp</span>
+            }
+          </div>
+
+          <p class="job-desc">{{ job.jobDescription }}</p>
+
+          <div class="skills-wrap">
+            @for (skill of job.skills; track skill) {
+              <span class="skill-tag">{{ skill }}</span>
+            }
+          </div>
+
+          <div class="card-footer">
+            <span class="deadline-text">
+              ⏰ Deadline: {{ job.applicationDeadline || 'Rolling' }}
+            </span>
+            <a [href]="'mailto:' + job.contactEmail + '?subject=Application for ' + job.jobTitle" class="btn btn-apply">
+              Apply via Email ✉️
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- INTERNSHIPS LIST -->
+  @if (activeTab() === 'internships') {
+    <div class="opportunities-grid">
+      @for (intern of filteredInternships(); track intern._id || intern.id) {
+        <div class="job-card">
+          <div class="card-head">
+            <div class="company-badge intern-badge">{{ intern.company.charAt(0) }}</div>
+            <div class="role-info">
+              <h3 class="job-role">{{ intern.title }}</h3>
+              <p class="company-name">{{ intern.company }}</p>
+            </div>
+          </div>
+
+          <div class="tags-row">
+            <span class="pill pill-blue">📍 {{ intern.location.join(', ') }}</span>
+            @if (intern.stipend) {
+              <span class="pill pill-green">💵 {{ intern.stipend }}</span>
+            }
+            @if (intern.duration) {
+              <span class="pill pill-purple">⏳ {{ intern.duration }}</span>
+            }
+          </div>
+
+          <p class="job-desc">{{ intern.description }}</p>
+
+          <div class="skills-wrap">
+            @for (skill of intern.skills; track skill) {
+              <span class="skill-tag">{{ skill }}</span>
+            }
+          </div>
+
+          <div class="card-footer">
+            <span class="deadline-text">
+              ⏰ Deadline: {{ intern.applicationDeadline || 'Rolling' }}
+            </span>
+            <a [href]="'mailto:' + intern.contactEmail + '?subject=Application for ' + intern.title" class="btn btn-apply">
+              Apply via Email ✉️
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- POST OPPORTUNITY MODAL -->
+<app-modal
+  [isOpen]="isPostModalOpen()"
+  title="Post Opportunity for Mepco Alumni & Students"
+  maxWidth="640px"
+  (closed)="closePostModal()"
+>
+  <div modal-body>
+    <form [formGroup]="postForm" class="modal-form">
+      <div class="form-row">
+        <label>Type:</label>
+        <select formControlName="type">
+          <option value="job">Full-Time Job</option>
+          <option value="internship">Internship</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Job / Internship Title *</label>
+        <input type="text" formControlName="title" placeholder="e.g. Associate DevOps Engineer" />
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Company Name *</label>
+          <input type="text" formControlName="company" placeholder="e.g. Cisco Systems" />
+        </div>
+        <div class="form-group">
+          <label>Company Website</label>
+          <input type="url" formControlName="companyWebsite" placeholder="https://cisco.com" />
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Location(s) *</label>
+          <input type="text" formControlName="location" placeholder="e.g. Bengaluru, Remote" />
+        </div>
+        <div class="form-group">
+          <label>Contact / Referral Email *</label>
+          <input type="email" formControlName="contactEmail" placeholder="referrals@company.com" />
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Key Skills (comma separated) *</label>
+          <input type="text" formControlName="skills" placeholder="Docker, Kubernetes, AWS, Python" />
+        </div>
+        <div class="form-group">
+          <label>Compensation / Stipend</label>
+          <input type="text" formControlName="compensation" placeholder="e.g. ₹10 LPA or ₹30k/mo" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Role Description & Eligibility *</label>
+        <textarea rows="4" formControlName="description" placeholder="Specify key responsibilities and application instructions..."></textarea>
+      </div>
+    </form>
+  </div>
+  <div modal-footer>
+    <button (click)="closePostModal()" class="btn btn-secondary">Cancel</button>
+    <button (click)="onPostSubmit()" class="btn btn-primary">Post Opportunity</button>
+  </div>
+</app-modal>
