@@ -1,0 +1,252 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="donation-form" novalidate>
+  <div class="form-section">
+    <div class="section-header">
+      <span class="section-number">1</span>
+      <h4>Contribution Amount</h4>
+    </div>
+
+    <div class="preset-amount-grid">
+      @for (preset of presetAmounts; track preset) {
+        <button
+          type="button"
+          class="preset-btn"
+          [class.active]="selectedPreset() === preset"
+          (click)="selectPreset(preset)"
+        >
+          ₹{{ preset | number: '1.0-0' }}
+        </button>
+      }
+    </div>
+
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label for="amount">Custom Amount (INR) <span class="required">*</span></label>
+        <div class="currency-input-wrap">
+          <span class="currency-symbol">₹</span>
+          <input
+            id="amount"
+            type="number"
+            formControlName="amount"
+            placeholder="Enter amount in Rupees"
+            (input)="onCustomAmountInput()"
+            [class.input-error]="isFieldInvalid('amount')"
+          />
+        </div>
+        @if (isFieldInvalid('amount')) {
+          <span class="error-msg">{{ getErrorMessage('amount') }}</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-header">
+      <span class="section-number">2</span>
+      <h4>Payment & Personal Information</h4>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="transactionMode">Transaction Mode <span class="required">*</span></label>
+        <select
+          id="transactionMode"
+          formControlName="transactionMode"
+          [class.input-error]="isFieldInvalid('transactionMode')"
+        >
+          <option value="online">Online Payment (Cards / UPI / NetBanking)</option>
+          <option value="upi">UPI (GPay / PhonePe / Paytm)</option>
+          <option value="netbanking">Net Banking</option>
+          <option value="card">Credit / Debit Card</option>
+          <option value="cheque">Demand Draft / Cheque</option>
+          <option value="cash">Direct Cash Endowment</option>
+        </select>
+        @if (isFieldInvalid('transactionMode')) {
+          <span class="error-msg">{{ getErrorMessage('transactionMode') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Mobile Number <span class="required">*</span></label>
+        <input
+          id="phone"
+          type="tel"
+          formControlName="phone"
+          placeholder="+919876543210"
+          [class.input-error]="isFieldInvalid('phone')"
+        />
+        @if (isFieldInvalid('phone')) {
+          <span class="error-msg">{{ getErrorMessage('phone') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="firstName">First Name <span class="required">*</span></label>
+        <input
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          placeholder="e.g. Ramesh"
+          [class.input-error]="isFieldInvalid('firstName')"
+        />
+        @if (isFieldInvalid('firstName')) {
+          <span class="error-msg">{{ getErrorMessage('firstName') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Last Name <span class="required">*</span></label>
+        <input
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          placeholder="e.g. Kumar"
+          [class.input-error]="isFieldInvalid('lastName')"
+        />
+        @if (isFieldInvalid('lastName')) {
+          <span class="error-msg">{{ getErrorMessage('lastName') }}</span>
+        }
+      </div>
+
+      <div class="form-group full-width">
+        <label for="email">Email Address <span class="required">*</span></label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="ramesh@alumni.mepco.edu"
+          [class.input-error]="isFieldInvalid('email')"
+        />
+        @if (isFieldInvalid('email')) {
+          <span class="error-msg">{{ getErrorMessage('email') }}</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-header">
+      <span class="section-number">3</span>
+      <h4>Address for Tax Exemption Receipt (80G)</h4>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group full-width">
+        <label for="street">Building / Street Address <span class="required">*</span></label>
+        <input
+          id="street"
+          type="text"
+          formControlName="street"
+          placeholder="Flat 402, Green Avenue, Main Street"
+          [class.input-error]="isFieldInvalid('street')"
+        />
+        @if (isFieldInvalid('street')) {
+          <span class="error-msg">{{ getErrorMessage('street') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="locality">Locality / Area <span class="required">*</span></label>
+        <input
+          id="locality"
+          type="text"
+          formControlName="locality"
+          placeholder="e.g. Sivakasi West"
+          [class.input-error]="isFieldInvalid('locality')"
+        />
+        @if (isFieldInvalid('locality')) {
+          <span class="error-msg">{{ getErrorMessage('locality') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="city">City <span class="required">*</span></label>
+        <input
+          id="city"
+          type="text"
+          formControlName="city"
+          placeholder="e.g. Virudhunagar"
+          [class.input-error]="isFieldInvalid('city')"
+        />
+        @if (isFieldInvalid('city')) {
+          <span class="error-msg">{{ getErrorMessage('city') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="state">State <span class="required">*</span></label>
+        <input
+          id="state"
+          type="text"
+          formControlName="state"
+          placeholder="Tamil Nadu"
+          [class.input-error]="isFieldInvalid('state')"
+        />
+        @if (isFieldInvalid('state')) {
+          <span class="error-msg">{{ getErrorMessage('state') }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="pincode">Postal Pincode <span class="required">*</span></label>
+        <input
+          id="pincode"
+          type="text"
+          formControlName="pincode"
+          placeholder="626005"
+          maxlength="6"
+          [class.input-error]="isFieldInvalid('pincode')"
+        />
+        @if (isFieldInvalid('pincode')) {
+          <span class="error-msg">{{ getErrorMessage('pincode') }}</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-group full-width">
+      <label for="notes">Dedication Note / Instructions (Optional)</label>
+      <textarea
+        id="notes"
+        formControlName="notes"
+        rows="3"
+        placeholder="Share a message of encouragement, dedicate in memory of a professor or batch..."
+      ></textarea>
+      <span class="hint-text">Maximum 500 characters</span>
+    </div>
+
+    <div class="checkbox-group">
+      <label class="custom-checkbox">
+        <input type="checkbox" formControlName="anonymous" />
+        <span class="checkmark"></span>
+        <span class="checkbox-label">
+          <strong>Donate Anonymously</strong> — Mask my name and email in the public donor roll
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button
+      type="button"
+      class="btn-secondary"
+      (click)="onCancel()"
+      [disabled]="isSubmitting()"
+    >
+      Cancel
+    </button>
+
+    <button
+      type="submit"
+      class="btn-submit"
+      [disabled]="isSubmitting()"
+    >
+      @if (isSubmitting()) {
+        <span class="spinner"></span>
+        <span>Processing Contribution...</span>
+      } @else {
+        <span>Contribute ₹{{ form.get('amount')?.value | number: '1.0-0' }} Now</span>
+      }
+    </button>
+  </div>
+</form>

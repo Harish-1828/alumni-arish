@@ -1,0 +1,116 @@
+<div class="contribute-page">
+  <div class="contribute-container">
+    <!-- TOP HEADER -->
+    <div class="page-title-row">
+      <div>
+        <nav class="breadcrumb">
+          <a routerLink="/fundraising">Fundraising</a>
+          <span class="sep">/</span>
+          <span class="current">Make a Contribution</span>
+        </nav>
+        <h1 class="main-title">Contribute to Alumni Endowment</h1>
+      </div>
+
+      <div class="fund-selector-wrap">
+        <label for="fundSelect">Select Initiative:</label>
+        <select
+          id="fundSelect"
+          [ngModel]="selectedFundId()"
+          (ngModelChange)="onFundChange($event)"
+          class="fund-select-input"
+        >
+          @for (f of allFunds(); track f._id || f.id) {
+            <option [value]="f._id || f.id">{{ f.title }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <!-- CAMPAIGN SNAPSHOT CARD -->
+    @if (selectedFund()) {
+      <div class="fund-summary-banner">
+        <div class="banner-content">
+          <div class="badge-row">
+            <span class="campaign-tag">Target Campaign</span>
+            <span class="tax-tag">80G Eligible</span>
+          </div>
+          <h2 class="campaign-title">{{ selectedFund()?.title }}</h2>
+          <p class="campaign-desc">{{ selectedFund()?.description }}</p>
+
+          <div class="progress-wrap">
+            <app-progress-bar
+              [current]="selectedFund()?.raised || 0"
+              [target]="selectedFund()?.goal || 1"
+              height="8px"
+            />
+          </div>
+
+          <div class="financial-summary">
+            <span class="fin-stat">
+              Raised: <strong>₹{{ (selectedFund()?.raised || 0) | number: '1.0-0' }}</strong>
+            </span>
+            <span class="fin-stat">
+              Goal: <strong>₹{{ (selectedFund()?.goal || 0) | number: '1.0-0' }}</strong>
+            </span>
+            <span class="fin-stat">
+              Contributors: <strong>{{ selectedFund()?.contributors || 0 }}</strong>
+            </span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- SUCCESS NOTIFICATION / RECEIPT -->
+    @if (isSuccess()) {
+      <div class="success-card">
+        <div class="success-icon">🎉</div>
+        <h2>Thank You for Your Generosity!</h2>
+        <p>Your contribution has been successfully processed and allocated to the endowment fund.</p>
+        <div class="receipt-box">
+          <div class="receipt-row">
+            <span>Transaction Reference:</span>
+            <strong>{{ lastDonationRef() }}</strong>
+          </div>
+          <div class="receipt-row">
+            <span>Beneficiary:</span>
+            <strong>Mepco Schlenk Engineering College Alumni Trust</strong>
+          </div>
+          <div class="receipt-row">
+            <span>Tax Exemption:</span>
+            <strong>Section 80G Certified Receipt issued via email</strong>
+          </div>
+        </div>
+        <div class="success-actions">
+          <button (click)="resetSuccess()" class="btn btn-primary">
+            Make Another Donation
+          </button>
+          <a routerLink="/contributions" class="btn btn-secondary">
+            View Contributions Roll
+          </a>
+        </div>
+      </div>
+    } @else {
+      <!-- DONATION FORM -->
+      <div class="form-wrapper-card">
+        @if (selectedFund()) {
+          <app-donation-form
+            [fundId]="selectedFund()?._id || selectedFund()?.id || ''"
+            [fundTitle]="selectedFund()?.title || ''"
+            (submitted)="onSubmitted($event)"
+            (cancelled)="navigateBack()"
+          />
+        }
+      </div>
+    }
+
+    <!-- CAMPAIGN CONTRIBUTIONS TABLE -->
+    <div class="feed-section">
+      <app-contribution-table
+        [contributions]="contributions()"
+        title="Recent Contributions for this Fund"
+        [showSearch]="false"
+      />
+    </div>
+  </div>
+</div>
+

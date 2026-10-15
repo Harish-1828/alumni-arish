@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mepco Schlenk Engineering College</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="stylesheet" href="home_page.css">
+  <link rel="stylesheet" href="../dark-mode.css">
+  <script src="../auth-check.js"></script>
+</head>
+<body>
+  <div class="top-header">
+    <div class="logo-title-row">
+      <a href="#"><img src="/images/clg_logo.png" alt="Mepco Schlenk Engineering College Logo" class="header-logo" /></a>
+    </div>
+    <div class="contact">
+      <label>📞+91-4562-235104,235120</label><br><br>
+      <label>✉️ msec@mepcoeng.ac.in</label>
+    </div>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
+      <a href="../friends/friends.html"><li style="position: relative; left: 10px;">FRIENDS</li></a><a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
+      <a href="../event page/event_page.html"><li>EVENTS</li></a>
+      <a href="../gallery/gallery.html"><li>GALLERY</li></a>
+      <a href="../proudable_alumni/proudable_alumni.html"><li>PROUDABLE ALUMNI</li></a>
+      <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
+      <a href="#"><li class="nav-right">ABOUT US</li></a>
+      <a href="#" onclick="handleLogout(event)"><li class="nav-right">LOGOUT</li></a>
+    </ul>
+  </nav>
+  <div class="main-body">
+    <div class="main-content">
+      <div class="left-side">
+        <div class="slide-placeholder">
+          <div class="profile">
+            <img src="/images/user.png" alt="user profile" style="width: 150px; border-radius: 50%; border: 1px solid black;">
+          </div>
+          <br>
+          <label id="name"></label><br><br>
+          <label id="alumni_id"></label><br><br>
+          <label id="batch"></label><br><br>
+          <label id="mail"></label>
+        </div>
+      </div>
+      <div class="main-section">
+        <div class="posts">
+          <div class="inner-post" id="post"></div>
+        </div>
+      </div>
+      <div class="event-lister">
+        <h2 style="padding-top: 15px; padding-left: 10px;">News and Announcements</h2>
+      </div>
+    </div>
+  </div>
+  <script src="../dark-mode.js"></script>
+  <script src="../config.js"></script>
+  <script src="home_page.js"></script>
+</body>
+</html>

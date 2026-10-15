@@ -1,0 +1,134 @@
+<div class="fund-page">
+  <!-- HERO BANNER -->
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-badge">🎓 Alumni Giving & Endowment Fund</div>
+      <h1 class="hero-title">Empowering the Future of Mepco Schlenk</h1>
+      <p class="hero-subtitle">
+        Join our global network of alumni in shaping the future. Every contribution directly funds state-of-the-art laboratory infrastructure, underprivileged student scholarships, and pioneering engineering research.
+      </p>
+
+      <div class="hero-actions">
+        <a routerLink="/contributions" class="btn btn-hero-secondary">
+          View Donor Roll
+        </a>
+        <a routerLink="/admin/funds" class="btn btn-hero-primary">
+          Manage Fundraisers
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS OVERVIEW -->
+  <section class="stats-container">
+    <div class="stats-grid">
+      <app-stat-card
+        icon="💰"
+        label="Total Funds Raised"
+        [value]="stats().totalRaised | number: '1.0-0'"
+        prefix="₹"
+        trend="Across all active campaigns"
+        theme="blue"
+      />
+      <app-stat-card
+        icon="🎯"
+        label="Total Goal Target"
+        [value]="stats().totalGoal | number: '1.0-0'"
+        prefix="₹"
+        trend="Target for academic year"
+        theme="amber"
+      />
+      <app-stat-card
+        icon="👥"
+        label="Alumni Donors"
+        [value]="stats().totalContributors | number: '1.0-0'"
+        suffix="+"
+        trend="Graduates contributing"
+        theme="green"
+      />
+      <app-stat-card
+        icon="🚀"
+        label="Active Campaigns"
+        [value]="stats().activeCampaigns"
+        trend="Initiatives in progress"
+        theme="purple"
+      />
+    </div>
+  </section>
+
+  <!-- CAMPAIGNS SECTION -->
+  <section class="campaigns-section">
+    <div class="section-top-bar">
+      <div>
+        <h2 class="section-title">Active Fundraising Campaigns</h2>
+        <p class="section-desc">Select an initiative below to support our departments and students.</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Search campaigns..."
+            [ngModel]="searchFilter()"
+            (ngModelChange)="searchFilter.set($event)"
+          />
+        </div>
+
+        <select [ngModel]="sortBy()" (ngModelChange)="sortBy.set($event)" class="sort-select">
+          <option value="recent">Sort by: Recent</option>
+          <option value="goal">Sort by: Highest Goal</option>
+          <option value="progress">Sort by: Most Funded %</option>
+        </select>
+
+        <button (click)="reload()" class="refresh-btn" title="Refresh data">
+          🔄
+        </button>
+      </div>
+    </div>
+
+    @if (loading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading alumni fundraising initiatives...</p>
+      </div>
+    } @else if (filteredFunds().length === 0) {
+      <div class="empty-state-card">
+        <span class="empty-icon">📂</span>
+        <h3>No Campaigns Found</h3>
+        <p>Try adjusting your search query or check back later for new endowment drives.</p>
+      </div>
+    } @else {
+      <div class="funds-grid">
+        @for (fund of filteredFunds(); track fund._id || fund.id) {
+          <app-fund-card [fund]="fund" />
+        }
+      </div>
+    }
+  </section>
+
+  <!-- IMPACT / VALUE PROPOSITION -->
+  <section class="impact-section">
+    <div class="impact-inner">
+      <h2 class="impact-title">Why Your Contribution Matters</h2>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <span class="impact-icon">📜</span>
+          <h4>80G Tax Exemption</h4>
+          <p>All contributions to Mepco Schlenk Engineering College are 100% eligible for tax rebate under Section 80G of the Income Tax Act.</p>
+        </div>
+        <div class="impact-card">
+          <span class="impact-icon">🔬</span>
+          <h4>World-Class Labs</h4>
+          <p>Equipping our labs with industry-grade IoT, Robotics, AI compute, and materials testing facilities to produce industry-ready graduates.</p>
+        </div>
+        <div class="impact-card">
+          <span class="impact-icon">🌟</span>
+          <h4>Zero Overhead</h4>
+          <p>100% of your donation is routed directly into the designated college trust account without administrative deductions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+

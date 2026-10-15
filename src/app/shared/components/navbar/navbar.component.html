@@ -1,0 +1,139 @@
+<header class="site-header">
+  <div class="top-header">
+    <div class="header-inner">
+      <div class="brand-row">
+        <a routerLink="/fundraising" class="logo-link">
+          <img
+            src="/images/clg_logo.png"
+            alt="Mepco Schlenk Engineering College Logo"
+            class="header-logo"
+            onerror="this.src='/logo.svg'"
+          />
+        </a>
+      </div>
+
+      <div class="header-contact">
+        <div class="contact-pill">
+          <span class="contact-icon">📞</span>
+          <span class="contact-text">+91-4562-235104, 235120</span>
+        </div>
+        <div class="contact-pill">
+          <span class="contact-icon">✉️</span>
+          <span class="contact-text">msec@mepcoeng.ac.in</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="main-navbar" aria-label="Main Navigation">
+    <div class="nav-inner">
+      <button
+        class="mobile-toggle"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen()"
+        aria-label="Toggle navigation menu"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <ul class="nav-links" [class.mobile-open]="isMobileMenuOpen()">
+        <li>
+          <a
+            routerLink="/alumni profile/alumni_profile.html"
+            (click)="closeMobileMenu()"
+          >
+            PROFILE
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/friends/friends.html"
+            (click)="closeMobileMenu()"
+          >
+            FRIENDS
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/job_posting/job-sidebar.html"
+            (click)="closeMobileMenu()"
+          >
+            JOB POSTING
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/event page/event_page.html"
+            (click)="closeMobileMenu()"
+          >
+            EVENTS
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/gallery/gallery.html"
+            (click)="closeMobileMenu()"
+          >
+            GALLERY
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/proudable_alumni/proudable_alumni.html"
+            (click)="closeMobileMenu()"
+          >
+            PROUDABLE ALUMNI
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/fundraising"
+            routerLinkActive="active-nav"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="closeMobileMenu()"
+          >
+            FUND RAISING
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/contributions"
+            routerLinkActive="active-nav"
+            (click)="closeMobileMenu()"
+          >
+            DONATIONS LEDGER
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/admin/funds"
+            routerLinkActive="active-nav"
+            class="admin-badge-nav"
+            (click)="closeMobileMenu()"
+          >
+            ADMIN PORTAL
+          </a>
+        </li>
+        <li class="nav-right">
+          @if (authService.isAuthenticated()) {
+            <div class="user-chip">
+              <span class="user-avatar">👤</span>
+              <span class="user-name">{{ authService.currentUser()?.name || 'Alumnus' }}</span>
+              <button class="logout-btn" (click)="logout()">LOGOUT</button>
+            </div>
+          } @else {
+            <a
+              routerLink="/login/login_page.html"
+              class="login-nav-btn"
+              (click)="closeMobileMenu()"
+            >
+              LOGIN
+            </a>
+          }
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

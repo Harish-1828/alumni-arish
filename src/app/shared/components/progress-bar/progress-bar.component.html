@@ -1,0 +1,27 @@
+<div class="progress-wrapper">
+  @if (showLabel()) {
+    <div class="progress-meta">
+      <span class="progress-label">Progress</span>
+      <span class="progress-value" [class.completed]="isCompleted()">
+        {{ percentage() }}% Funded
+      </span>
+    </div>
+  }
+  <div
+    class="progress-track"
+    [style.height]="height()"
+    role="progressbar"
+    [attr.aria-valuenow]="percentage()"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  >
+    <div
+      class="progress-fill"
+      [class.variant-primary]="variant() === 'primary'"
+      [class.variant-success]="variant() === 'success'"
+      [class.variant-warning]="variant() === 'warning'"
+      [class.completed]="isCompleted()"
+      [style.width.%]="percentage()"
+    ></div>
+  </div>
+</div>

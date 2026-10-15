@@ -1,0 +1,65 @@
+<div class="history-page">
+  <div class="history-container">
+    <!-- HEADER -->
+    <div class="history-header">
+      <div>
+        <nav class="breadcrumb">
+          <a routerLink="/fundraising">Fundraising</a>
+          <span class="sep">/</span>
+          <span class="current">Donations Audit Ledger</span>
+        </nav>
+        <h1 class="page-title">Alumni Contributions Ledger</h1>
+        <p class="page-sub">Comprehensive audit record of all alumni gifts, grants, and endowments.</p>
+      </div>
+
+      <div class="header-actions">
+        <button (click)="exportCSV()" class="btn btn-export">
+          📥 Export CSV Ledger
+        </button>
+        <a routerLink="/contribute" class="btn btn-primary">
+          + Record Donation
+        </a>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <app-stat-card
+        icon="💎"
+        label="Total Contributions Volume"
+        [value]="totalDonated() | number: '1.0-0'"
+        prefix="₹"
+        theme="blue"
+      />
+      <app-stat-card
+        icon="🧾"
+        label="Total Transactions"
+        [value]="contributions().length"
+        theme="green"
+      />
+      <app-stat-card
+        icon="📈"
+        label="Average Gift Size"
+        [value]="averageDonation() | number: '1.0-0'"
+        prefix="₹"
+        theme="purple"
+      />
+      <app-stat-card
+        icon="🕶️"
+        label="Anonymous Gifts"
+        [value]="anonymousCount()"
+        theme="amber"
+      />
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-section">
+      <app-contribution-table
+        [contributions]="contributions()"
+        title="Global Donations Roll"
+        [showSearch]="true"
+      />
+    </div>
+  </div>
+</div>
+

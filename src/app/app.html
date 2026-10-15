@@ -1,0 +1,61 @@
+<app-navbar />
+
+<main class="app-main">
+  <router-outlet />
+</main>
+
+<footer class="app-footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <div class="footer-logo-row">
+        <img
+          src="/images/clg_logo.png"
+          alt="Mepco Schlenk Engineering College"
+          class="footer-logo"
+          onerror="this.src='/logo.svg'"
+        />
+      </div>
+      <p class="affil">
+        An Autonomous Institution · Approved by AICTE · Accredited with 'A' Grade by NAAC
+      </p>
+      <p class="addr">
+        Mepco Engineering College Post - 626 005, Virudhunagar District, Tamil Nadu, India.
+      </p>
+    </div>
+
+    <div class="footer-nav">
+      <h4>Endowment & Giving</h4>
+      <ul>
+        <li><a routerLink="/fundraising">Fundraising Campaigns</a></li>
+        <li><a routerLink="/contribute">Contribute Online</a></li>
+        <li><a routerLink="/contributions">Contributions Audit Ledger</a></li>
+        <li><a routerLink="/admin/funds">Campaigns Admin Portal</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-nav">
+      <h4>Alumni Services</h4>
+      <ul>
+        <li><a routerLink="/alumni profile/alumni_profile.html">Alumni Directory</a></li>
+        <li><a routerLink="/job_posting/job-sidebar.html">Career & Job Board</a></li>
+        <li><a routerLink="/event page/event_page.html">Reunions & Events</a></li>
+        <li><a routerLink="/gallery/gallery.html">Campus Photo Gallery</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Alumni Relations Cell</h4>
+      <p>📞 +91-4562-235104, 235120</p>
+      <p>✉️ msec@mepcoeng.ac.in</p>
+      <p>🏛️ Section 80G Tax Exemption Certified</p>
+    </div>
+  </div>
+
+  <div class="footer-copyright">
+    <p>
+      © {{ currentYear }} Mepco Schlenk Engineering College Alumni Association. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<app-toast />

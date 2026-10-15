@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage My Job Postings</title>
+  <link rel="stylesheet" href="job-sidebar.css">
+  <link rel="stylesheet" href="manage-postings.css">
+  <link rel="stylesheet" href="../dark-mode.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+  <div class="top-header">
+    <div class="logo-title-row">
+      <a href="/home page/home_page.html"><img src="/images/clg_logo.png" alt="Mepco Schlenk Engineering College Logo" class="header-logo" /></a>
+    </div>
+    <div class="contact">
+      <label>📞+91-4562-235104,235120</label><br><br>
+      <label>✉️ msec@mepcoeng.ac.in</label>
+    </div>
+  </div>
+  <nav class="navbar">
+    <ul>
+      <a href="../alumni profile/alumni_profile.html"><li style="position: relative; left: 10px;">PROFILE</li></a>
+      <a href="../friends/friends.html"><li style="position: relative; left: 10px;">FRIENDS</li></a>
+      <a href="../job_posting/job-sidebar.html"><li>JOB POSTING</li></a>
+      <a href="../event page/event_page.html"><li>EVENTS</li></a>
+      <a href="../gallery/gallery.html"><li>GALLERY</li></a>
+      <a href="../proudable_alumni/proudable_alumni.html"><li>PROUDABLE ALUMNI</li></a>
+      <a href="../fund1/fund_raising.html"><li>FUND RAISING</li></a>
+      <a href="#"><li style="position: relative; left: 290px;">ABOUT US</li></a>
+      <a href="../index.html"><li style="position: relative; left: 300px;">LOGOUT</li></a>
+    </ul>
+  </nav>
+
+  <div class="manage-container">
+    <div class="manage-header">
+      <h1>Manage My Postings</h1>
+      <button class="back-btn" onclick="window.location.href='job-sidebar.html'">← Back to Job Board</button>
+    </div>
+
+    <div class="tabs-container">
+      <button class="tab-btn active" data-type="jobs">My Jobs</button>
+      <button class="tab-btn" data-type="internships">My Internships</button>
+    </div>
+
+    <div id="postings-list" class="postings-list">
+      <div class="loading-msg">Loading your postings...</div>
+    </div>
+  </div>
+
+  <script src="../dark-mode.js"></script>
+  <script src="manage-postings.js"></script>
+</body>
+</html>
